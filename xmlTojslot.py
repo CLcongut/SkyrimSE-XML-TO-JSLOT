@@ -58,9 +58,10 @@ def calculate_mapped_value(value_dict, weight):
     return value_dict.get('small', 0) + (value_dict.get('big', 0) - value_dict.get('small', 0)) * weight
 
 def update_jslot_content(content, target_name, final_value):
+    # 支持keys数组中包含多个key对象的情况，精准定位RaceMenuMorphsCBBE.esp对应的value
     pattern = re.compile(
-        r'(?s)(\{[^\}]*?"keys"\s*:\s*\[\s*\{[^\}]*?"key"\s*:\s*"RaceMenuMorphsCBBE\.esp"\s*,\s*"value"\s*:\s*)[-+]?\d*\.?\d+'
-        r'([^\}]*\}\s*\]\s*,\s*"name"\s*:\s*"' + re.escape(target_name) + r'")'
+        r'(?s)(\{[^\}]*?"keys"\s*:\s*\[[^\]]*?"key"\s*:\s*"RaceMenuMorphsCBBE\.esp"\s*,\s*"value"\s*:\s*)[-+]?\d*\.?\d+'
+        r'([^\]]*\]\s*,\s*"name"\s*:\s*"' + re.escape(target_name) + r'")'
     )
     return pattern.sub(rf'\g<1>{final_value:.2f}\g<2>', content)
 
@@ -143,3 +144,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
